@@ -2,6 +2,8 @@
 
 A RESTful API that was built with Python and FastAPI for tracking internship applications.
 
+![FastAPI Swagger Documentation](images/swagger.png)
+
 ## Features
 
 - Able to create internship applications
