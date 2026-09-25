@@ -17,7 +17,7 @@ def home():
 }
 
 @app.post(
-    "/applications/{application_id}",
+    "/applications",
     response_model=ApplicationRead,
     status_code=201
 )
@@ -33,13 +33,15 @@ def create_application(
 
     return new_application
 
-@app.get("/applications", response_model=ApplicationRead)
+@app.get(    "/applications",
+    response_model=list[ApplicationRead])
 def get_applications(db: Session = Depends(get_db)):
     applications = db.scalars(select(Application)).all()
     return applications
 
 @app.get(
-    "/applications/{application_id}"
+    "/applications/{application_id}",
+    response_model=ApplicationRead
 )
 def get_application(
         application_id: int,
