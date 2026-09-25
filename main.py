@@ -54,3 +54,55 @@ def get_application(
             detail = "Application not found"
         )
     return application
+
+@app.put(
+    "/applications/{application_id}",
+    response_model=ApplicationRead
+)
+def update_application(
+        application_id: int,
+        updated_data: ApplicationCreate,
+        db: Session = Depends(get_db)
+):
+    application = db.get(Application, application_id)
+
+    if application is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Application not found"
+        )
+
+    application.company = updated_data.company
+    application.position = updated_data.position
+    application.status = updated_data.status
+    application.application_date = updated_data.application_date
+    application.location = updated_data.location
+    application.job_url = updated_data.job_url
+    application.notes = updated_data.notes
+
+    db.commit()
+    db.refresh(application)
+
+    return application
+
+@app.delete(
+    "/applications/{application_id}",
+    status_code=204
+)
+def delete_application(
+        application_id: int,
+        db: Session = Depends(get_db)
+):
+    application = db.get(Application, application_id)
+
+    if application is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Application not found"
+        )
+
+    db.delete(application)
+    db.commit()
+
+
+    return application
